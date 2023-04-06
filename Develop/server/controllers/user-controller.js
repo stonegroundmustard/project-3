@@ -58,7 +58,7 @@ module.exports = {
       return res.status(400).json(err);
     }
   },
-  // remove a book from `savedMovies`
+  // remove a Movie from `savedMovies`
   async deleteBook({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
