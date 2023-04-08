@@ -1,0 +1,71 @@
+:root {
+    --background: #252525;
+    --dark-background: #111111;
+    --primary: #ff6813;
+    --white: #ffffff;
+    --dark-white: #AAAAAA;
+    font-size: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Jaldi', sans-serif;
+    outline: none;
+}
+
+input, button {
+    border: 0px solid;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-size: 2rem;
+    color: var(--white);
+}
+
+h1 {
+    margin: 0;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+    font-weight: bold;
+    font-size: 3rem;
+    line-height: 0;
+}
+
+.app {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--background);
+    width: 100vw;
+    min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--background)
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--dark-background);
+    border: 0px solid;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--primary)
+  }
