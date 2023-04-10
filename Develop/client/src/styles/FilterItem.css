@@ -1,0 +1,23 @@
+.filter-item {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    user-select: none;
+    padding: 0 10%;
+    order: 2;
+    transition: transform .2s;
+}
+
+.filter-item:hover {
+    cursor: pointer;
+    transform: translateX(1rem);
+}
+
+.filter-item:active {
+    transform: scale(.9) translateX(1rem);
+}
+
+.active-filter {
+    background-color: var(--dark-background);
+    order: 1;
+}
