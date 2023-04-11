@@ -49,7 +49,7 @@ module.exports = {
     try {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
-        { $addToSet: { savedBooks: body } },
+        { $addToSet: { savedMovies: body } },
         { new: true, runValidators: true }
       );
       return res.json(updatedUser);
@@ -59,10 +59,10 @@ module.exports = {
     }
   },
   // remove a Movie from `savedMovies`
-  async deleteBook({ user, params }, res) {
+  async deleteMovies({ user, params }, res) {
     const updatedUser = await User.findOneAndUpdate(
       { _id: user._id },
-      { $pull: { savedBooks: { bookId: params.bookId } } },
+      { $pull: { savedMovies: { movieId: params.movieId } } },
       { new: true }
     );
     if (!updatedUser) {

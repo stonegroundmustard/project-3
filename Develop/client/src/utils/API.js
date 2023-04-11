@@ -35,13 +35,13 @@ export const getMe = (token) => {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(MovieData),
+      body: JSON.stringify(movieData),
     });
   };
   
-  // remove saved moive data for a logged in user
+  // remove saved movie data for a logged in user
   export const removeMovie = (movieId, token) => {
-    return fetch(`/api/users/books/${movieId}`, {
+    return fetch(`/api/users/movies/${movieId}`, {
       method: 'DELETE',
       headers: {
         authorization: `Bearer ${token}`,
@@ -49,18 +49,20 @@ export const getMe = (token) => {
     });
   };
   
-  
-  export const searchMovies = (movie, search_field, API_KEY) => {
-    // check for spaces in movie name 
-    const name_array = movie.split(" "); 
-    var search = name_array[0]; 
-    for (let i = 1; i < name_array.length; i ++){
-        search += '%20'; 
-        search += name_array[i]; 
-    }
-    return fetch(`https://api.watchmode.com/v1/search/?apiKey=${API_KEY}&search_field=${search_field}&search_value=${search}'}`);
+  // search for movies by genre
+  export const searchMoviesGenre = (genre, API_KEY) => {
+    return fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_genres=${genre}`);
   };
 
+  // search for all movies with what gets enter in the search bar
+  export const searchMovies =(movieName, API_KEY) => {
+    return fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${movieName}&page=1&include_adult=false`); 
+  }
+
+  // get the details of a specific movie using the movie id 
+  export const getMovie = (movieID, API_KEY) =>{
+    return fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=${API_KEY}&language=en-US`); 
+  }
   export const getRecommendation = () => {
     return fetch(); 
   }; 
