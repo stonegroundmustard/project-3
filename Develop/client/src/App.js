@@ -5,6 +5,7 @@ import Search from "./pages/Search";
 import Saved from "./pages/Saved";
 
 import "./App.css";
+import Login from "./pages/Login";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Search />} />
                     <Route path="/saved" element={<Saved />} />
+                    <Route path="/login" element={<Login />} />
                     <Route path="*" element={<h1>Wrong page!</h1>} />
                 </Routes>
             </Router>
