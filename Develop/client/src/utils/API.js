@@ -39,7 +39,7 @@ export const getMe = (token) => {
     });
   };
   
-  // remove saved moive data for a logged in user
+  // remove saved movie data for a logged in user
   export const removeMovie = (movieId, token) => {
     return fetch(`/api/users/movies/${movieId}`, {
       method: 'DELETE',
