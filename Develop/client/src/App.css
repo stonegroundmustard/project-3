@@ -47,7 +47,7 @@ button {
     flex-direction: column;
     background-color: var(--background);
     width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 ::-webkit-scrollbar {
