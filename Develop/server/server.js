@@ -1,28 +1,42 @@
 const express = require('express');
-// Run npm install mongodb and require mongodb and MongoClient class
-const mongodb = require('mongodb').MongoClient;
+const { ApolloServer } = require('apollo-server-express');
+const path = require('path');
 
+const { typeDefs, resolvers } = require('./schemas');
+const db = require('./config/connection');
+
+const PORT = process.env.PORT || 3001;
 const app = express();
-const port = 3001;
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-// Connection string to local instance of MongoDB including database name
-const connectionStringURI = `mongodb://127.0.0.1:27017/project03DB`;
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-// Declare a variable to hold the connection
-let db;
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
 
-// Creates a connection to a MongoDB instance and returns the reference to the database
-mongodb.connect(
-  // Defines connection between app and MongoDB instance
-  connectionStringURI,
-  // Sets connection string parser and Server Discover and Monitoring engine to true and avoids warning
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err, client) => {
-    // Use client.db() constructor to add new db instance
-    db = client.db();
-    app.listen(port, () => {
-      console.log(`Example app listening at http://localhost:${port}`);
-    });
-  }
-);
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
+
+// Create a new instance of an Apollo server with the GraphQL schema
+const startApolloServer = async (typeDefs, resolvers) => {
+  await server.start();
+  server.applyMiddleware({ app });
+  
+  db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+      console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+    })
+  })
+  };
+  
+// Call the async function to start the server
+  startApolloServer(typeDefs, resolvers);
 
