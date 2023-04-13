@@ -151,11 +151,33 @@ const Search = () => {
 
     // Toggles a specific filter based on its previous state
     function handleToggleActive(filterId) {
+        const query = filterId +','+ activeGenres; 
         setActiveGenres((prevState) => {
             if (prevState.includes(filterId))
                 return prevState.filter((id) => id !== filterId);
             return [...prevState, filterId];
         });
+
+        handleGenreSearch(query); 
+    }
+
+    async function handleGenreSearch(query){ 
+        const response = await searchMoviesGenre(query, API_KEY); 
+        if (!response.ok) {
+            throw new Error('something went wrong!');
+           }
+           const { results }  = await response.json(); 
+           const movieData = results.map((movie) => ({
+               id: movie.id,
+               title: movie.title,
+               genres: movie.genre_ids.map(id => {
+                   const genre = GENRE_FILTERS.find(g => g.id === id);
+                   return genre ? genre.name : null;
+                 }).filter(name => name !== null), 
+               image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+               link: `https://www.themoviedb.org/movie/${movie.id}`, 
+           }));
+           setSearchedMovies(movieData); 
     }
 
     // Function to handle the submission of the search form
