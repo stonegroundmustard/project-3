@@ -171,9 +171,12 @@ const Search = () => {
         const movieData = results.map((movie) => ({
             id: movie.id,
             title: movie.title,
-            genres: movie.genre_ids,
+            genres: movie.genre_ids.map(id => {
+                const genre = GENRE_FILTERS.find(g => g.id === id);
+                return genre ? genre.name : null;
+              }).filter(name => name !== null), 
             image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
-            link: "", 
+            link: `https://www.themoviedb.org/movie/${movie.id}`, 
         }));
         setSearchedMovies(movieData); 
 
