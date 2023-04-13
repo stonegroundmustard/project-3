@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieResult from "../components/MovieResult";
 import FilterItem from "../components/FilterItem";
-import { searchMovies, searchMoviesGenre, searchPopMovies } from "../utils/API"; 
+import { searchMovies, searchMoviesGenre, searchPopMovies } from "../utils/API";
 
 import "../styles/Search.css";
 
 //require('dotenv').config();
 
-const API_KEY = '6507f12c70c05d087443f11fa6d712a7'; 
+const API_KEY = '6507f12c70c05d087443f11fa6d712a7';
 // Dummy array of placeholder movies, will be replaced by movie data saved in state
 // const DUMMY_MOVIES = async () => {
-//     const response = await searchPopMovies('6507f12c70c05d087443f11fa6d712a7'); 
-    
+//     const response = await searchPopMovies(API_KEY); 
+
 //     if (!response.ok) {
 //         throw new Error('something went wrong!');
 //       }
@@ -147,60 +147,84 @@ const Search = () => {
 
     const [searchInput, setSearchInput] = useState('');
     // State holding the movies from the search (currently has dummy movies as default)
-    const [searchedMovies, setSearchedMovies] = useState(DUMMY_MOVIES)
+    const [searchedMovies, setSearchedMovies] = useState([]);
+
+    useEffect( () => {
+        async function setDefault(){
+            const response = await searchPopMovies(API_KEY);
+
+            if (!response.ok) {
+                throw new Error('something went wrong!');
+            }
+            const { results } = await response.json();
+            const moviesData = results.map((movie) => ({
+                id: movie.id,
+                title: movie.title,
+                genres: movie.genre_ids.map(id => {
+                    const genre = GENRE_FILTERS.find(g => g.id === id);
+                    return genre ? genre.name : null;
+                }).filter(name => name !== null),
+                image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+                link: `https://www.themoviedb.org/movie/${movie.id}`,
+            }));
+            setSearchedMovies(moviesData);
+        }
+        setDefault(); 
+    }, []);
+
 
     // Toggles a specific filter based on its previous state
     function handleToggleActive(filterId) {
-        const query = filterId +','+ activeGenres; 
+        const query = filterId + ',' + activeGenres;
         setActiveGenres((prevState) => {
             if (prevState.includes(filterId))
                 return prevState.filter((id) => id !== filterId);
             return [...prevState, filterId];
         });
 
-        handleGenreSearch(query); 
+        handleGenreSearch(query);
     }
 
-    async function handleGenreSearch(query){ 
-        const response = await searchMoviesGenre(query, API_KEY); 
+    async function handleGenreSearch(query) {
+        const response = await searchMoviesGenre(query, API_KEY);
         if (!response.ok) {
             throw new Error('something went wrong!');
-           }
-           const { results }  = await response.json(); 
-           const movieData = results.map((movie) => ({
-               id: movie.id,
-               title: movie.title,
-               genres: movie.genre_ids.map(id => {
-                   const genre = GENRE_FILTERS.find(g => g.id === id);
-                   return genre ? genre.name : null;
-                 }).filter(name => name !== null), 
-               image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
-               link: `https://www.themoviedb.org/movie/${movie.id}`, 
-           }));
-           setSearchedMovies(movieData); 
-    }
-
-    // Function to handle the submission of the search form
-    async function handleSearchSubmit(event) {
-        event.preventDefault()
-        console.log("searching for");
-        const response = await searchMovies(searchInput,API_KEY); 
-    
-        if (!response.ok) {
-         throw new Error('something went wrong!');
         }
-        const { results }  = await response.json(); 
+        const { results } = await response.json();
         const movieData = results.map((movie) => ({
             id: movie.id,
             title: movie.title,
             genres: movie.genre_ids.map(id => {
                 const genre = GENRE_FILTERS.find(g => g.id === id);
                 return genre ? genre.name : null;
-              }).filter(name => name !== null), 
+            }).filter(name => name !== null),
             image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
-            link: `https://www.themoviedb.org/movie/${movie.id}`, 
+            link: `https://www.themoviedb.org/movie/${movie.id}`,
         }));
-        setSearchedMovies(movieData); 
+        setSearchedMovies(movieData);
+    }
+
+    // Function to handle the submission of the search form
+    async function handleSearchSubmit(event) {
+        event.preventDefault()
+        console.log("searching for");
+        const response = await searchMovies(searchInput, API_KEY);
+
+        if (!response.ok) {
+            throw new Error('something went wrong!');
+        }
+        const { results } = await response.json();
+        const movieData = results.map((movie) => ({
+            id: movie.id,
+            title: movie.title,
+            genres: movie.genre_ids.map(id => {
+                const genre = GENRE_FILTERS.find(g => g.id === id);
+                return genre ? genre.name : null;
+            }).filter(name => name !== null),
+            image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+            link: `https://www.themoviedb.org/movie/${movie.id}`,
+        }));
+        setSearchedMovies(movieData);
 
     }
 
@@ -229,13 +253,13 @@ const Search = () => {
             <section className="search-container">
                 <div htmlFor="search">Search movies</div>
                 <form action="submit" className="search-form" onSubmit={handleSearchSubmit}>
-                    <input type="text" name="search" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}/>
+                    <input type="text" name="search" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
                     <button>Search</button>
                 </form>
             </section>
             <section className="search-results-container">
                 {searchedMovies.map((movie, ind) => (
-                    <MovieResult key={ind} {...movie} onSaveMovie={handleSaveMovie}/>
+                    <MovieResult key={ind} {...movie} onSaveMovie={handleSaveMovie} />
                 ))}
             </section>
         </div>
