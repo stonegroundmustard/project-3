@@ -1,10 +1,34 @@
 import React, { useState } from "react";
 import MovieResult from "../components/MovieResult";
 import FilterItem from "../components/FilterItem";
+import { searchMovies, searchMoviesGenre, searchPopMovies } from "../utils/API"; 
 
 import "../styles/Search.css";
 
+//require('dotenv').config();
+
+const API_KEY = '6507f12c70c05d087443f11fa6d712a7'; 
 // Dummy array of placeholder movies, will be replaced by movie data saved in state
+// const DUMMY_MOVIES = async () => {
+//     const response = await searchPopMovies('6507f12c70c05d087443f11fa6d712a7'); 
+    
+//     if (!response.ok) {
+//         throw new Error('something went wrong!');
+//       }
+//     const { results }  = await response.json(); 
+//     const moviesData = results.map((movie) => ({
+//         id: movie.id,
+//         title: movie.title,
+//         genres: movie.genre_ids,
+//         image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+//         link: "", 
+//       }));
+//     console.log(moviesData); 
+//     return moviesData; 
+// }
+
+//const DUMMY_MOVIES = getDummyMovies(); 
+
 const DUMMY_MOVIES = [
     {
         id: 0,
@@ -36,6 +60,7 @@ const DUMMY_MOVIES = [
     },
 ];
 
+//console.log(DUMMY_MOVIES()); 
 // Constant array of all difference genres and their IDs
 const GENRE_FILTERS = [
     {
@@ -120,22 +145,63 @@ const Search = () => {
     // Keeps track of which filters are active. This can be used to modify search query
     const [activeGenres, setActiveGenres] = useState([]);
 
+    const [searchInput, setSearchInput] = useState('');
     // State holding the movies from the search (currently has dummy movies as default)
     const [searchedMovies, setSearchedMovies] = useState(DUMMY_MOVIES)
 
     // Toggles a specific filter based on its previous state
     function handleToggleActive(filterId) {
+        const query = filterId +','+ activeGenres; 
         setActiveGenres((prevState) => {
             if (prevState.includes(filterId))
                 return prevState.filter((id) => id !== filterId);
             return [...prevState, filterId];
         });
+
+        handleGenreSearch(query); 
+    }
+
+    async function handleGenreSearch(query){ 
+        const response = await searchMoviesGenre(query, API_KEY); 
+        if (!response.ok) {
+            throw new Error('something went wrong!');
+           }
+           const { results }  = await response.json(); 
+           const movieData = results.map((movie) => ({
+               id: movie.id,
+               title: movie.title,
+               genres: movie.genre_ids.map(id => {
+                   const genre = GENRE_FILTERS.find(g => g.id === id);
+                   return genre ? genre.name : null;
+                 }).filter(name => name !== null), 
+               image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+               link: `https://www.themoviedb.org/movie/${movie.id}`, 
+           }));
+           setSearchedMovies(movieData); 
     }
 
     // Function to handle the submission of the search form
-    function handleSearchSubmit(event) {
+    async function handleSearchSubmit(event) {
         event.preventDefault()
         console.log("searching for");
+        const response = await searchMovies(searchInput,API_KEY); 
+    
+        if (!response.ok) {
+         throw new Error('something went wrong!');
+        }
+        const { results }  = await response.json(); 
+        const movieData = results.map((movie) => ({
+            id: movie.id,
+            title: movie.title,
+            genres: movie.genre_ids.map(id => {
+                const genre = GENRE_FILTERS.find(g => g.id === id);
+                return genre ? genre.name : null;
+              }).filter(name => name !== null), 
+            image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+            link: `https://www.themoviedb.org/movie/${movie.id}`, 
+        }));
+        setSearchedMovies(movieData); 
+
     }
 
     // Function to handle the saving of a movie
@@ -163,7 +229,7 @@ const Search = () => {
             <section className="search-container">
                 <div htmlFor="search">Search movies</div>
                 <form action="submit" className="search-form" onSubmit={handleSearchSubmit}>
-                    <input type="text" name="search" />
+                    <input type="text" name="search" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}/>
                     <button>Search</button>
                 </form>
             </section>
