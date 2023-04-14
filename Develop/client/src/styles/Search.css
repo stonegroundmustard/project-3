@@ -59,7 +59,7 @@
     grid-area: results;
     display: flex;
     flex-wrap: wrap;
-    gap: 5rem;
+    align-items: center;
 }
 
 .filter-list {

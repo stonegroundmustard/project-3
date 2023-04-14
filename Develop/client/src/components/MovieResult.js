@@ -2,11 +2,23 @@ import React from "react";
 
 import "../styles/MovieResult.css";
 
-const MovieResult = ({id, title, image, genres, link, onSaveMovie }) => {
-
+const MovieResult = ({
+    id,
+    title,
+    image,
+    genres,
+    link,
+    onSaveMovie,
+    saved,
+    onDeleteMovie,
+}) => {
     // Uses the 'onSaveMove' prop to pass up the Id of the movie to be saved
     function handleSaveMovie() {
-        onSaveMovie(id)
+        onSaveMovie(id);
+    }
+
+    function handleDeleteMovie() {
+        onDeleteMovie(id);
     }
 
     return (
@@ -24,7 +36,15 @@ const MovieResult = ({id, title, image, genres, link, onSaveMovie }) => {
                     </div>
                 </div>
             </a>
-            <button className="save-button" onClick={handleSaveMovie}>Save +</button>
+            {!saved ? (
+                <button className="save-button" onClick={handleSaveMovie}>
+                    Save +
+                </button>
+            ) : (
+                <button className="save-button" onClick={handleDeleteMovie}>
+                    Delete x
+                </button>
+            )}
         </div>
     );
 };

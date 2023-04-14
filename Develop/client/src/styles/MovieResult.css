@@ -1,23 +1,22 @@
 .movie-result-container {
     position: relative;
-    flex-grow: 1;
     display: flex;
+    flex: 1 max(calc(30% - 5rem), 300px);
     flex-direction: column;
     justify-content: flex-end;
     aspect-ratio: 15/16;
-    max-width: 30%;
-    min-width: 300px;
-    width: 10vw;
+    max-width: max(calc(30% - 5rem), 300px);
+    margin: 2.5rem;
     border: 0px solid;
     border-radius: 10px;
     background-position: center;
     background-size: cover;
-    transition: box-shadow, transform .2s;
+    transition: box-shadow, transform 0.2s;
 }
 
 .movie-result-container:hover {
     cursor: pointer;
-    box-shadow: 0px 0px 10px 0px rgba(255, 104, 19, .5);
+    box-shadow: 0px 0px 10px 0px rgba(255, 104, 19, 0.5);
     transform: translateY(1%);
 }
 
@@ -51,17 +50,16 @@
     gap: 5px;
 }
 
-
 .save-button {
     position: absolute;
     top: 3%;
     right: 3%;
     padding: 2rem;
     border-radius: 20px;
-    box-shadow: 0px 0px 50px 10px rgba(0,0,0,0.75);
-    transition: transform .2s;
+    box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, 0.75);
+    transition: transform 0.2s;
 }
 
 .save-button:active {
-    transform: scale(.9);
+    transform: scale(0.9);
 }

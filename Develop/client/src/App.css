@@ -25,6 +25,7 @@ html, body {
     overflow-x: hidden;
     font-size: 2rem;
     color: var(--white);
+    background-color: var(--background);
 }
 
 h1 {
@@ -47,7 +48,7 @@ button {
     flex-direction: column;
     background-color: var(--background);
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 ::-webkit-scrollbar {
