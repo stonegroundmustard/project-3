@@ -5,62 +5,11 @@ import { searchMovies, searchMoviesGenre, searchPopMovies } from "../utils/API";
 
 import "../styles/Search.css";
 
-//require('dotenv').config();
+
 
 const API_KEY = '6507f12c70c05d087443f11fa6d712a7';
-// Dummy array of placeholder movies, will be replaced by movie data saved in state
-// const DUMMY_MOVIES = async () => {
-//     const response = await searchPopMovies(API_KEY); 
 
-//     if (!response.ok) {
-//         throw new Error('something went wrong!');
-//       }
-//     const { results }  = await response.json(); 
-//     const moviesData = results.map((movie) => ({
-//         id: movie.id,
-//         title: movie.title,
-//         genres: movie.genre_ids,
-//         image: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
-//         link: "", 
-//       }));
-//     console.log(moviesData); 
-//     return moviesData; 
-// }
 
-//const DUMMY_MOVIES = getDummyMovies(); 
-
-const DUMMY_MOVIES = [
-    {
-        id: 0,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 1,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 2,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 3,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-];
-
-//console.log(DUMMY_MOVIES()); 
 // Constant array of all difference genres and their IDs
 const GENRE_FILTERS = [
     {
