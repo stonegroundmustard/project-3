@@ -3,11 +3,15 @@ import React, { useRef, useState } from "react";
 import "../styles/Login.css";
 
 const Login = () => {
+    // Manages whether the page is displaying for signing up
     const [signingUp, setSigningUp] = useState(false);
+
+    // State variables to hold credentials
     const [enteredEmail, setEnteredEmail] = useState("");
     const [enteredUsername, setEnteredUsername] = useState("");
     const [enteredPassword, setEnteredPassword] = useState("");
 
+    // Toggle the display of the sign up html or the login html
     function handleToggleSignUp() {
         setEnteredEmail("");
         setEnteredUsername("");
@@ -20,13 +24,23 @@ const Login = () => {
     function handleFormSubmit(event) {
         event.preventDefault();
 
+        if (signingUp) {
+            // Do signup logic here
+            console.log("signing up");
+            return
+        }
+        
+        // Do login logic here
         console.log({ enteredEmail, enteredUsername, enteredPassword });
-
+        window.location.assign('/');
+        
+        // Reset input fields
         setEnteredEmail("");
         setEnteredUsername("");
         setEnteredPassword("");
     }
 
+    // Handles the updating of the state variables, discerning which to update by the name of the element
     function handleInputChange(event) {
         const inputName = event.target.name;
 
@@ -40,7 +54,7 @@ const Login = () => {
     return (
         <main className="login-page">
             {!signingUp ? (
-                <div className="login-container">
+                <div className="login-container card">
                     <h1>Login</h1>
                     <form
                         action="submit"
@@ -72,7 +86,7 @@ const Login = () => {
                     </div>
                 </div>
             ) : (
-                <div className="sign-up-container">
+                <div className="sign-up-container card">
                     <h1>Signup</h1>
                     <form
                         action="submit"
