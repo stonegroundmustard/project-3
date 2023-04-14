@@ -1,4 +1,5 @@
-    "scripts": {
+{   "scripts": {
       "start": "cd Develop && npm run develop",
       "install": "cd Develop && npm i",
     },
+}
