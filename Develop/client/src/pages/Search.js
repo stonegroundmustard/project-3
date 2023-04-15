@@ -112,7 +112,7 @@ const Search = () => {
 
     useEffect(() => {
         async function setDefault() {
-            const response = await searchPopMovies(API_KEY);
+            const response = await searchPopMovies();
 
             if (!response.ok) {
                 throw new Error("something went wrong!");
@@ -136,19 +136,21 @@ const Search = () => {
     }, []);
 
     // Toggles a specific filter based on its previous state
-    function handleToggleActive(filterId) {
-        const query = filterId + "," + activeGenres;
+    function handleToggleActive(genreId) {
         setActiveGenres((prevState) => {
-            if (prevState.includes(filterId))
-                return prevState.filter((id) => id !== filterId);
-            return [...prevState, filterId];
+            let newState = [...prevState];
+            if (prevState.includes(genreId)) {
+                newState = newState.filter((id) => id !== genreId);
+            } else {
+                newState.push(genreId);
+            }
+            handleGenreSearch(newState);
+            return newState;
         });
-
-        handleGenreSearch(query);
     }
 
-    async function handleGenreSearch(query) {
-        const response = await searchMoviesGenre(query, API_KEY);
+    async function handleGenreSearch(genres) {
+        const response = await searchMoviesGenre(genres);
         if (!response.ok) {
             throw new Error("something went wrong!");
         }
@@ -172,7 +174,7 @@ const Search = () => {
     async function handleSearchSubmit(event) {
         event.preventDefault();
         console.log("searching for");
-        const response = await searchMovies(searchInput, API_KEY);
+        const response = await searchMovies(searchInput);
 
         if (!response.ok) {
             throw new Error("something went wrong!");
@@ -236,7 +238,7 @@ const Search = () => {
         <div className="search-body">
             <aside className="filters-aside">
                 <div className="genre-filters">
-                    <h1>Genres</h1>
+                    <h1>Discover</h1>
                     <div className="filter-list">
                         {GENRE_FILTERS.map((genre) => (
                             <FilterItem
