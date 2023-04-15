@@ -2,58 +2,56 @@ import React, { useState } from "react";
 import MovieResult from "../components/MovieResult";
 
 import "../styles/Saved.css";
-
-const DUMMY_MOVIES = [
-    {
-        id: 0,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 1,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 2,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-    {
-        id: 3,
-        title: "The Matrix",
-        image: "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_.jpg",
-        genres: ["Action", "Thriller"],
-        link: "https://www.imdb.com/title/tt0133093/",
-    },
-];
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ME } from "../utils/queries";
+import { DELETE_MOVIE } from "../utils/mutations";
+import auth from "../utils/auth";
 
 const Saved = () => {
-    const [savedMovies, setSavedMovies] = useState(DUMMY_MOVIES);
+    // const [savedMovies, setSavedMovies] = useState(DUMMY_MOVIES);
+    const { loading, data: userData } = useQuery(GET_ME);
+    const user = userData?.me || undefined;
+    const [deleteMovie, { deleteError, deleteData }] =
+        useMutation(DELETE_MOVIE);
 
-    function handleDeleteMovie(id) {
-      console.log(`delete movie with id ${id}`);
+    async function handleDeleteMovie(movieId) {
+        const token = auth.loggedIn() ? auth.getToken() : null;
+
+        if (!token) {
+            return false;
+        }
+
+        try {
+            const { data } = await deleteMovie({ variables: { movieId } });
+
+            if (!data) {
+                console.log(deleteError);
+                throw new Error("something went wrong!");
+            }
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
         <div className="saved-page">
             <h1>My Movies</h1>
-            <section className="saved-movies-container">
-                {savedMovies.map((movie, ind) => (
-                    <MovieResult
-                        key={ind}
-                        {...movie}
-                        saved={true}
-                        onDeleteMovie={handleDeleteMovie}
-                    />
-                ))}
-            </section>
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                <section className="saved-movies-container">
+                    {user.savedMovies.map((movie, ind) => (
+                        <MovieResult
+                            key={ind}
+                            {...movie}
+                            id={movie.movieId}
+                            saved={true}
+                            loggedIn={!!user}
+                            onDeleteMovie={handleDeleteMovie}
+                        />
+                    ))}
+                </section>
+            )}
         </div>
     );
 };
