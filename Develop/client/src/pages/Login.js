@@ -1,8 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 import "../styles/Login.css";
+import { CREATE_USER, LOGIN_USER } from "../utils/mutations";
+import { useMutation } from "@apollo/client";
+import auth from "../utils/auth";
 
 const Login = () => {
+    const [login, { loginError, loginData }] = useMutation(LOGIN_USER);
+    const [signup, { signupError, signupData }] = useMutation(CREATE_USER);
+
     // Manages whether the page is displaying for signing up
     const [signingUp, setSigningUp] = useState(false);
 
@@ -21,19 +27,52 @@ const Login = () => {
         });
     }
 
-    function handleFormSubmit(event) {
+    async function handleFormSubmit(event) {
         event.preventDefault();
 
         if (signingUp) {
             // Do signup logic here
-            console.log("signing up");
-            return
+            try {
+                const { data } = await signup({
+                    variables: {
+                        email: enteredEmail,
+                        username: enteredUsername,
+                        password: enteredPassword,
+                    },
+                });
+
+                
+                if (!data) {
+                    console.log(signupError);
+                    throw new Error("something went wrong!");
+                }
+                
+                const { token, user } = data.createUser;
+                auth.login(token);
+            } catch (err) {
+                console.error(err);
+            }
+            return;
         }
-        
+
         // Do login logic here
-        console.log({ enteredEmail, enteredUsername, enteredPassword });
-        window.location.assign('/');
-        
+        try {
+            console.log({ enteredEmail, enteredPassword });
+            const { data } = await login({
+                variables: { email: enteredEmail, password: enteredPassword },
+            });
+
+            if (!data) {
+                console.log(loginError);
+                throw new Error("something went wrong!");
+            }
+
+            const { token, user } = data.login;
+            auth.login(token);
+        } catch (err) {
+            console.error(err);
+        }
+
         // Reset input fields
         setEnteredEmail("");
         setEnteredUsername("");
@@ -62,11 +101,11 @@ const Login = () => {
                         onSubmit={handleFormSubmit}
                     >
                         <div className="form-group">
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username">Email</label>
                             <input
                                 type="text"
-                                name="username"
-                                value={enteredUsername}
+                                name="email"
+                                value={enteredEmail}
                                 onChange={handleInputChange}
                             />
                         </div>

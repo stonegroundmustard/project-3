@@ -10,9 +10,8 @@ const typeDefs = gql`
     }
 
     type Movie {
-        movieId: String!
+        movieId: Int!
         title: String!
-        description: String!
         link: String!
         genres: [String]!
         image: String!
@@ -24,9 +23,8 @@ const typeDefs = gql`
         }
 
     input MovieInput {
-        movieId: String!
+        movieId: Int!
         title: String!
-        description: String!
         link: String!
         genres: [String]!
         image: String!
@@ -39,9 +37,9 @@ const typeDefs = gql`
 
     type Mutation {
         login(email: String!, password: String!): Auth
-        createUser(email: String!, username: String!, password: String!): User
-        addMovie(_id: ID!, movie: MovieInput!): User
-        deleteMovie(movieId: String!, _id: ID!): User
+        createUser(email: String!, username: String!, password: String!): Auth
+        addMovie(movie: MovieInput!): User
+        deleteMovie(movieId: Int!): User
     }
 `;
 

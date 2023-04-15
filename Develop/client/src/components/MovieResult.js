@@ -3,7 +3,7 @@ import React from "react";
 import "../styles/MovieResult.css";
 
 const MovieResult = ({
-    id,
+    id: movieId,
     title,
     image,
     genres,
@@ -11,14 +11,15 @@ const MovieResult = ({
     onSaveMovie,
     saved,
     onDeleteMovie,
+    loggedIn,
 }) => {
     // Uses the 'onSaveMove' prop to pass up the Id of the movie to be saved
     function handleSaveMovie() {
-        onSaveMovie(id);
+        onSaveMovie({ movieId, title, image, genres, link });
     }
 
     function handleDeleteMovie() {
-        onDeleteMovie(id);
+        onDeleteMovie(movieId);
     }
 
     return (
@@ -36,15 +37,16 @@ const MovieResult = ({
                     </div>
                 </div>
             </a>
-            {!saved ? (
-                <button className="save-button" onClick={handleSaveMovie}>
-                    Save +
-                </button>
-            ) : (
-                <button className="save-button" onClick={handleDeleteMovie}>
-                    Delete x
-                </button>
-            )}
+            {loggedIn &&
+                (!saved ? (
+                    <button className="save-button" onClick={handleSaveMovie}>
+                        Save +
+                    </button>
+                ) : (
+                    <button className="save-button" onClick={handleDeleteMovie}>
+                        Delete x
+                    </button>
+                ))}
         </div>
     );
 };
