@@ -1,0 +1,5 @@
+{   "scripts": {
+      "start": "cd Develop && npm run develop",
+      "install": "cd Develop/server && npm i && cd ../client && npm i"
+    }
+}

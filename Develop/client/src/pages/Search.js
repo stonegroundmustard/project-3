@@ -9,8 +9,6 @@ import { GET_ME } from "../utils/queries";
 import { ADD_MOVIE, DELETE_MOVIE } from "../utils/mutations";
 import auth from "../utils/auth";
 
-//require('dotenv').config();
-
 const API_KEY = "6507f12c70c05d087443f11fa6d712a7";
 
 // Constant array of all different genres and their IDs
