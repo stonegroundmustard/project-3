@@ -1,11 +1,6 @@
 const apiKey = process.env.REACT_APP_API_KEY;
 // search for movies by genre
 export const searchMoviesGenre = (genres = []) => {
-    console.log(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&with_genres=${genres.join(
-            "%2C"
-        )}`
-    );
     return fetch(
         `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&with_genres=${genres.join(
             "%2C"
