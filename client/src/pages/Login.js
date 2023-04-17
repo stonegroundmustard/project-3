@@ -112,7 +112,7 @@ const Login = () => {
                         <div className="form-group">
                             <label htmlFor="username">Password</label>
                             <input
-                                type="text"
+                                type="password"
                                 name="password"
                                 value={enteredPassword}
                                 onChange={handleInputChange}
@@ -153,7 +153,7 @@ const Login = () => {
                         <div className="form-group">
                             <label htmlFor="username">Password</label>
                             <input
-                                type="text"
+                                type="password"
                                 name="password"
                                 value={enteredPassword}
                                 onChange={handleInputChange}
