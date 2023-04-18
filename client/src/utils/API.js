@@ -9,7 +9,7 @@ export const searchMoviesGenre = (genres = []) => {
 };
 
 // search for all movies with what gets enter in the search bar
-export const searchMovies = (movieName, apiKey) => {
+export const searchMovies = (movieName) => {
     return fetch(
         `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${movieName}&page=1&include_adult=false`
     );
