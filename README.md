@@ -26,7 +26,7 @@
 
 ## Questions
 - For any questions checkout the repo or reach out via email!  
-- GitHub: [[https://github.com/bbohling22](https://github.com/stonegroundmustard/project-3)]
+- GitHub: [https://github.com/stonegroundmustard/project-3]
 - Email: ysrinu15@email.com
 
 ## Credits
